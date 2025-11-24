@@ -91,6 +91,8 @@ export const initDatabase = async () => {
         category TEXT NOT NULL,
         status TEXT NOT NULL DEFAULT 'pending' CHECK(status IN ('pending', 'notified_owner', 'contractor_selected', 'scheduled', 'in_progress', 'completed', 'cancelled')),
         priority TEXT DEFAULT 'medium' CHECK(priority IN ('low', 'medium', 'high', 'urgent')),
+        renter_available_times TEXT,
+        selection_token TEXT UNIQUE,
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
         updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY (property_id) REFERENCES properties(id),
@@ -161,6 +163,29 @@ export const initDatabase = async () => {
         FOREIGN KEY (actor_id) REFERENCES users(id)
       )
     `);
+
+    // Migration: Add new columns to maintenance_requests if they don't exist
+    try {
+      // Check if renter_available_times column exists
+      const columns = await db.all("PRAGMA table_info(maintenance_requests)");
+      const hasRenterAvailableTimes = columns.some(col => col.name === 'renter_available_times');
+      const hasSelectionToken = columns.some(col => col.name === 'selection_token');
+
+      if (!hasRenterAvailableTimes) {
+        await db.run('ALTER TABLE maintenance_requests ADD COLUMN renter_available_times TEXT');
+        console.log('✅ Added renter_available_times column');
+      }
+
+      if (!hasSelectionToken) {
+        await db.run('ALTER TABLE maintenance_requests ADD COLUMN selection_token TEXT');
+        // Create unique index for selection_token
+        await db.run('CREATE UNIQUE INDEX IF NOT EXISTS idx_selection_token ON maintenance_requests(selection_token) WHERE selection_token IS NOT NULL');
+        console.log('✅ Added selection_token column');
+      }
+    } catch (error) {
+      // Ignore errors if columns already exist
+      console.log('Migration check completed');
+    }
 
     console.log('✅ Database schema initialized');
   } catch (error) {
