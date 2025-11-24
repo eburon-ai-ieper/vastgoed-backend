@@ -11,6 +11,7 @@ import propertyRoutes from './routes/properties.js';
 import maintenanceRoutes from './routes/maintenance.js';
 import contractorRoutes from './routes/contractors.js';
 import scheduleRoutes from './routes/schedule.js';
+import notificationRoutes from './routes/notifications.js';
 
 dotenv.config();
 
@@ -32,6 +33,7 @@ app.use('/api/properties', propertyRoutes);
 app.use('/api/maintenance', maintenanceRoutes);
 app.use('/api/contractors', contractorRoutes);
 app.use('/api/schedule', scheduleRoutes);
+app.use('/api/notifications', notificationRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {

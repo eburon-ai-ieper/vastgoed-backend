@@ -57,11 +57,17 @@ Server will run on http://localhost:3001
 
 ### Maintenance Requests
 - `GET /api/maintenance` - Get all requests (filtered by role)
-- `POST /api/maintenance` - Create new request (renter)
+- `POST /api/maintenance` - Create new request (renter) - **Auto-notifies owner, auto-selects contractor, auto-schedules**
 - `GET /api/maintenance/:id` - Get request details
 - `POST /api/maintenance/:id/notify-owner` - Notify owner (broker)
-- `POST /api/maintenance/:id/select-contractor` - Select contractor (owner)
+- `POST /api/maintenance/:id/select-contractor` - Select contractor (owner) - **Auto-schedules appointment**
 - `POST /api/maintenance/:id/schedule` - Schedule appointment (broker)
+
+### Notifications
+- `GET /api/notifications` - Get all notifications for current user
+- `GET /api/notifications/unread-count` - Get unread notification count
+- `PATCH /api/notifications/:id/read` - Mark notification as read
+- `PATCH /api/notifications/read-all` - Mark all notifications as read
 
 ### Contractors
 - `GET /api/contractors` - Get all active contractors
@@ -88,6 +94,7 @@ Server will run on http://localhost:3001
 - **Database**: SQLite3
 - **Authentication**: JWT
 - **Password Hashing**: bcryptjs
+- **Email**: Nodemailer (SMTP) - Supports Mailgun, SendGrid, Gmail, etc.
 
 ## 📝 Scripts
 
@@ -95,6 +102,32 @@ Server will run on http://localhost:3001
 - `npm run dev` - Start development server with nodemon
 - `npm run init-db` - Initialize database schema
 - `npm run create-demo-data` - Create demo data for testing
+
+## 📧 Email Notifications
+
+The system supports real email delivery via SMTP. Configure in `.env`:
+
+```env
+SMTP_HOST=smtp.mailgun.org
+SMTP_PORT=587
+SMTP_USER=your-smtp-username
+SMTP_PASS=your-smtp-password
+SMTP_FROM=noreply@yourdomain.com
+FRONTEND_URL=http://localhost:3000
+```
+
+See `MAILGUN_SETUP.md` or `EMAIL_SETUP_GUIDE.md` for detailed setup instructions.
+
+## 🚀 Automation Features
+
+The system includes **fully automated workflow**:
+- ✅ Auto-notify owner when request is created
+- ✅ Auto-select contractor based on category/specialty matching
+- ✅ Auto-schedule appointments (default: 2 days from request)
+- ✅ Real-time email notifications to all parties
+- ✅ In-app notification system with badge counts
+
+See `AUTOMATION_FEATURES.md` for details.
 
 ## 📄 License
 
