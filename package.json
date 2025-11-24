@@ -1,0 +1,31 @@
+{
+  "name": "vastgoed-backend",
+  "version": "1.0.0",
+  "description": "Property Management System Backend - Automates maintenance request workflow",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "init-db": "node scripts/init-db.js",
+    "create-test-data": "node scripts/create-test-data.js",
+    "create-demo-data": "node scripts/create-demo-data.js"
+  },
+  "keywords": ["property", "management", "maintenance", "automation"],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "sqlite3": "^5.1.6",
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.2",
+    "nodemailer": "^6.9.7",
+    "express-validator": "^7.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}
+
