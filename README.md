@@ -57,13 +57,13 @@ Server will run on http://localhost:3001
 
 ### Maintenance Requests
 - `GET /api/maintenance` - Get all requests (filtered by role)
-- `POST /api/maintenance` - Create new request (renter) - **Requires available times, auto-notifies owner**
+- `POST /api/maintenance` - Create new request (renter) - **Requires available times, notifies broker & owner**
 - `GET /api/maintenance/:id` - Get request details (includes renter, property, schedule info)
 - `POST /api/maintenance/:id/notify-owner` - Notify owner (broker)
 - `GET /api/maintenance/select-contractor/:token` - Get contractor selection page (public, token-based)
-- `POST /api/maintenance/select-contractor/:token` - Select contractor (public, token-based) - **Notifies all parties**
+- `POST /api/maintenance/select-contractor/:token` - Select contractor (public, token-based) - **Notifies contractor, renter, broker & owner**
 - `GET /api/maintenance/schedule-appointment/:token` - Get appointment scheduling page (public, token-based)
-- `POST /api/maintenance/schedule-appointment/:token` - Schedule appointment (public, token-based) - **Notifies all parties with calendar links**
+- `POST /api/maintenance/schedule-appointment/:token` - Schedule appointment (public, token-based) - **Notifies renter, owner, broker & contractor with calendar links**
 
 ### Notifications
 - `GET /api/notifications` - Get all notifications for current user
@@ -123,11 +123,13 @@ See `MAILGUN_SETUP.md` or `EMAIL_SETUP_GUIDE.md` for detailed setup instructions
 ## 🚀 Workflow Features
 
 The system includes **token-based workflow** for secure, email-driven actions:
-- ✅ Auto-notify owner when request is created (with selection link)
+- ✅ **Request Created**: Notifies broker & owner (owner receives selection link)
+- ✅ **Contractor Selected**: Notifies contractor (with scheduling link), renter, broker & owner
+- ✅ **Appointment Scheduled**: Notifies renter, owner, broker & contractor (all receive calendar links)
 - ✅ Owner selects contractor via secure token link (no login required)
 - ✅ Contractor schedules appointment via secure token link (no login required)
 - ✅ Renter can specify flexible availability (specific times, weekdays, weekends)
-- ✅ Real-time email notifications to all parties (renter, owner, broker, contractor)
+- ✅ Real-time email notifications to all parties at every step
 - ✅ Calendar integration (Google Calendar & Outlook) in appointment confirmation emails
 - ✅ In-app notification system with badge counts
 - ✅ Workflow history tracking for audit trail
